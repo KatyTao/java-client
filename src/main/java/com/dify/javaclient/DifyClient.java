@@ -1,28 +1,21 @@
+package com.dify.javaclient;
+
+import com.dify.javaclient.http.DifyRoute;
 import okhttp3.*;
 
 import java.io.IOException;
 
+import static com.dify.javaclient.constants.DifyServerConstants.BASE_URL;
 public class DifyClient {
-    public static final String BASE_URL = "https://api.dify.ai/v1";
 
-    private static class Route {
-        String method;
-        String url;
-
-        public Route(String method, String url) {
-            this.method = method;
-            this.url = url;
-        }
-    }
-
-    public static final Route APPLICATION = new Route("GET", "/parameters");
-    public static final Route FEEDBACK = new Route("POST", "/messages/%s/feedbacks");
-    public static final Route CREATE_COMPLETION_MESSAGE = new Route("POST", "/completion-messages");
-    public static final Route CREATE_CHAT_MESSAGE = new Route("POST", "/chat-messages");
-    public static final Route GET_CONVERSATION_MESSAGES = new Route("GET", "/messages");
-    public static final Route GET_CONVERSATIONS = new Route("GET", "/conversations");
-    public static final Route RENAME_CONVERSATION = new Route("PATCH", "/conversations/%s");
-    public static final Route DELETE_CONVERSATION = new Route("DELETE", "/conversations/%s");
+    public static final DifyRoute APPLICATION = new DifyRoute("GET", "/parameters");
+    public static final DifyRoute FEEDBACK = new DifyRoute("POST", "/messages/%s/feedbacks");
+    public static final DifyRoute CREATE_COMPLETION_MESSAGE = new DifyRoute("POST", "/completion-messages");
+    public static final DifyRoute CREATE_CHAT_MESSAGE = new DifyRoute("POST", "/chat-messages");
+    public static final DifyRoute GET_CONVERSATION_MESSAGES = new DifyRoute("GET", "/messages");
+    public static final DifyRoute GET_CONVERSATIONS = new DifyRoute("GET", "/conversations");
+    public static final DifyRoute RENAME_CONVERSATION = new DifyRoute("PATCH", "/conversations/%s");
+    public static final DifyRoute DELETE_CONVERSATION = new DifyRoute("DELETE", "/conversations/%s");
 
     private String apiKey;
     private String baseUrl;
@@ -42,7 +35,7 @@ public class DifyClient {
         this.apiKey = apiKey;
     }
 
-    public Response sendRequest(Route route, String[] formatArgs, RequestBody body) throws IOException {
+    public Response sendRequest(DifyRoute route, String[] formatArgs, RequestBody body) throws IOException {
         String formattedURL = (formatArgs != null && formatArgs.length > 0)
                 ? String.format(route.url, (Object[]) formatArgs)
                 : route.url;
@@ -105,12 +98,18 @@ public class DifyClient {
             throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl + GET_CONVERSATION_MESSAGES.url).newBuilder();
         urlBuilder.addQueryParameter("user", user);
-        if (conversationId != null && !conversationId.isEmpty())
+        if (conversationId != null && !conversationId.isEmpty()){
             urlBuilder.addQueryParameter("conversation_id", conversationId);
-        if (firstId != null)
+        }
+
+        if (firstId != null){
             urlBuilder.addQueryParameter("first_id", firstId);
-        if (limit != null)
+        }
+
+        if (limit != null){
             urlBuilder.addQueryParameter("limit", limit);
+        }
+
 
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
@@ -125,12 +124,17 @@ public class DifyClient {
     public Response getConversations(String user, String firstId, String limit, String pinned) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl + GET_CONVERSATIONS.url).newBuilder();
         urlBuilder.addQueryParameter("user", user);
-        if (firstId != null)
+        if (firstId != null){
             urlBuilder.addQueryParameter("first_id", firstId);
-        if (limit != null)
+        }
+
+        if (limit != null){
             urlBuilder.addQueryParameter("limit", limit);
-        if (pinned != null)
+        }
+
+        if (pinned != null){
             urlBuilder.addQueryParameter("pinned", pinned);
+        }
 
         Request request = new Request.Builder()
                 .url(urlBuilder.build())
