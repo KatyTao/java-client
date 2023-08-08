@@ -1,6 +1,7 @@
 package com.dify.javaclient;
 
 import com.dify.javaclient.http.DifyRoute;
+import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 import java.io.IOException;
 
@@ -61,5 +62,9 @@ public class DifyClient {
         RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
 
         return sendRequest(APPLICATION, null, body);
+    }
+
+    public static void main(String[] args) {
+
     }
 }
