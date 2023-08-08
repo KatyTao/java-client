@@ -1,6 +1,8 @@
 package com.dify.javaclient;
+
+import com.alibaba.fastjson2.JSONObject;
 import okhttp3.*;
-import java.io.IOException;
+
 public class ChatClient extends DifyClient {
     public ChatClient(String apiKey) {
         super(apiKey);
@@ -10,62 +12,64 @@ public class ChatClient extends DifyClient {
         super(apiKey, baseUrl);
     }
 
-    public Response createChatMessage(String inputs, String query, String user, boolean stream, String conversation_id) throws IOException {
-        String payload = "{ \"inputs\":\"" + inputs + "\", \"query\":\"" + query + "\", \"user\":\"" + user + "\",";
-        payload += "\"response_mode\":\"" + (stream ? "streaming" : "blocking") + "\",";
+    public Response createChatMessage(String inputs, String query, String user, boolean stream, String conversation_id) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("inputs", inputs);
+        json.put("query", query);
+        json.put("user", user);
+        json.put("response_mode", stream ? "streaming" : "blocking");
+        if (conversation_id != null && !conversation_id.isEmpty()) {
+            json.put("conversation_id", conversation_id);
+        }
 
-        if (conversation_id != null && !conversation_id.isEmpty())
-            payload += "\"conversation_id\":\"" + conversation_id + "\",";
-
-        payload = payload.substring(0, payload.length()-1) + "}";  // Remove trailing comma and close JSON object
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
-
-        return sendRequest(CREATE_CHAT_MESSAGE, null, body);
+        return sendRequest(CREATE_CHAT_MESSAGE, null, createJsonPayload(json));
     }
 
-    public Response getConversationMessages(String user, String conversation_id, String first_id, String limit) throws IOException {
-        String payload = "{ \"user\":\"" + user + "\",";
-        if (conversation_id != null && !conversation_id.isEmpty())
-            payload += "\"conversation_id\":\"" + conversation_id + "\",";
-        if (first_id != null && !first_id.isEmpty())
-            payload += "\"first_id\":\"" + first_id + "\",";
-        if (limit != null && !limit.isEmpty())
-            payload += "\"limit\":\"" + limit + "\",";
+    public Response getConversationMessages(String user, String conversation_id, String first_id, String limit) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("user", user);
+        if (conversation_id != null && !conversation_id.isEmpty()) {
+            json.put("conversation_id", conversation_id);
+        }
+        if (first_id != null && !first_id.isEmpty()) {
+            json.put("first_id", first_id);
+        }
+        if (limit != null && !limit.isEmpty()) {
+            json.put("limit", limit);
+        }
 
-        payload = payload.substring(0, payload.length()-1) + "}";  // Remove trailing comma and close JSON object
-
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
-
-        return sendRequest(GET_CONVERSATION_MESSAGES, null, body);
+        return sendRequest(GET_CONVERSATION_MESSAGES, null, createJsonPayload(json));
     }
 
-    public Response getConversations(String user, String first_id, String limit, String pinned) throws IOException {
-        String payload = "{ \"user\":\"" + user + "\",";
-        if (first_id != null && !first_id.isEmpty())
-            payload += "\"first_id\":\"" + first_id + "\",";
-        if (limit != null && !limit.isEmpty())
-            payload += "\"limit\":\"" + limit + "\",";
-        if (pinned != null && !pinned.isEmpty())
-            payload += "\"pinned\":\"" + pinned + "\",";
+    public Response getConversations(String user, String first_id, String limit, String pinned) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("user", user);
+        if (first_id != null && !first_id.isEmpty()) {
+            json.put("first_id", first_id);
+        }
+        if (limit != null && !limit.isEmpty()) {
+            json.put("limit", limit);
+        }
+        if (pinned != null && !pinned.isEmpty()) {
+            json.put("pinned", pinned);
+        }
 
-        payload = payload.substring(0, payload.length()-1) + "}";  // Remove trailing comma and close JSON object
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
-
-        return sendRequest(GET_CONVERSATIONS, null, body);
+        return sendRequest(GET_CONVERSATIONS, null, createJsonPayload(json));
     }
 
-    public Response renameConversation(String conversation_id, String name, String user) throws IOException {
-        String payload = "{ \"name\":\"" + name + "\", \"user\":\"" + user + "\" }";
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
+    public Response renameConversation(String conversation_id, String name, String user) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("user", user);
 
-        return sendRequest(RENAME_CONVERSATION, new String[] { conversation_id }, body);
+        return sendRequest(RENAME_CONVERSATION, new String[]{conversation_id}, createJsonPayload(json));
     }
 
-    public Response deleteConversation(String conversation_id, String user) throws IOException {
-        String payload = "{ \"user\":\"" + user + "\" }";
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
+    public Response deleteConversation(String conversation_id, String user) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("user", user);
 
-        return sendRequest(DELETE_CONVERSATION, new String[] { conversation_id }, body);
+        return sendRequest(DELETE_CONVERSATION, new String[]{conversation_id}, createJsonPayload(json));
     }
 }
 

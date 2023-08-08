@@ -1,7 +1,9 @@
 package com.dify.javaclient;
+
 import okhttp3.*;
-import java.io.IOException;
-public class CompletionClient extends DifyClient{
+import com.alibaba.fastjson2.JSONObject;
+
+public class CompletionClient extends DifyClient {
     public CompletionClient(String apiKey) {
         super(apiKey);
     }
@@ -10,11 +12,13 @@ public class CompletionClient extends DifyClient{
         super(apiKey, baseUrl);
     }
 
-    public Response createCompletionMessage(String inputs, String query, String user, boolean stream) throws IOException {
-        String response_mode = stream ? "streaming" : "blocking";
-        String payload = "{ \"inputs\":\"" + inputs + "\", \"query\":\"" + query + "\", \"user\":\"" + user + "\", \"response_mode\":\"" + response_mode + "\"}";
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
+    public Response createCompletionMessage(String inputs, String query, String user, boolean stream) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("inputs", inputs);
+        json.put("query", query);
+        json.put("user", user);
+        json.put("response_mode", stream ? "streaming" : "blocking");
 
-        return sendRequest(CREATE_COMPLETION_MESSAGE, null, body);
+        return sendRequest(CREATE_COMPLETION_MESSAGE, null, createJsonPayload(json));
     }
 }

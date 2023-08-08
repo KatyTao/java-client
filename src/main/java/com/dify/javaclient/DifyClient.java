@@ -1,11 +1,13 @@
 package com.dify.javaclient;
 
 import com.dify.javaclient.http.DifyRoute;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import okhttp3.*;
+
 import java.io.IOException;
 
 import static com.dify.javaclient.constants.DifyServerConstants.BASE_URL;
+
 public class DifyClient {
 
     public static final DifyRoute APPLICATION = new DifyRoute("GET", "/parameters");
@@ -35,34 +37,48 @@ public class DifyClient {
         this.apiKey = apiKey;
     }
 
-    public Response sendRequest(DifyRoute route, String[] formatArgs, RequestBody body) throws IOException {
-        String formattedURL = (formatArgs != null && formatArgs.length > 0)
-                ? String.format(route.url, (Object[]) formatArgs)
-                : route.url;
+    public Response sendRequest(DifyRoute route, String[] formatArgs, RequestBody body) throws DifyClientException {
+        try {
+            String formattedURL = (formatArgs != null && formatArgs.length > 0)
+                    ? String.format(route.url, (Object[]) formatArgs)
+                    : route.url;
 
-        Request request = new Request.Builder()
-                .url(baseUrl + formattedURL)
-                .method(route.method, body)
-                .addHeader("Authorization", "Bearer " + apiKey)
-                .addHeader("Content-Type", "application/json")
-                .build();
+            Request request = new Request.Builder()
+                    .url(baseUrl + formattedURL)
+                    .method(route.method, body)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .addHeader("Content-Type", "application/json")
+                    .build();
 
-        return client.newCall(request).execute();
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new DifyRequestException("Request failed with status: " + response.code());
+            }
+            return response;
+        } catch (IOException e) {
+            throw new DifyClientException("Error occurred while sending request: " + e.getMessage());
+        }
     }
 
-    public Response messageFeedback(String messageId, String rating, String user) throws IOException {
-        String payload = "{\"rating\":\"" + rating + "\", \"user\":\"" + user + "\"}";
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
+    public Response messageFeedback(String messageId, String rating, String user) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("rating", rating);
+        json.put("user", user);
 
-        return sendRequest(FEEDBACK, new String[] { messageId }, body);
+        return sendRequest(FEEDBACK, new String[]{messageId}, createJsonPayload(json));
     }
 
-    public Response getApplicationParameters(String user) throws IOException {
-        String payload = "{\"user\":\"" + user + "\"}";
-        RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
+    public Response getApplicationParameters(String user) throws DifyClientException {
+        JSONObject json = new JSONObject();
+        json.put("user", user);
 
-        return sendRequest(APPLICATION, null, body);
+        return sendRequest(APPLICATION, null, createJsonPayload(json));
     }
+
+    RequestBody createJsonPayload(JSONObject jsonObject) {
+        return RequestBody.create(jsonObject.toJSONString(), MediaType.parse("application/json"));
+    }
+
 
     public static void main(String[] args) {
 
