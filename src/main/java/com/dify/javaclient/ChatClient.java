@@ -3,6 +3,11 @@ package com.dify.javaclient;
 import com.alibaba.fastjson2.JSONObject;
 import okhttp3.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ChatClient extends DifyClient {
     public ChatClient(String apiKey) {
         super(apiKey);
@@ -10,6 +15,14 @@ public class ChatClient extends DifyClient {
 
     public ChatClient(String apiKey, String baseUrl) {
         super(apiKey, baseUrl);
+    }
+
+    private String generateQueryParams(Map<String, String> params) {
+        List<String> keyValuePairs = new ArrayList<>();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            keyValuePairs.add(entry.getKey() + "=" + entry.getValue());
+        }
+        return String.join("&", keyValuePairs);
     }
 
     public Response createChatMessage(String inputs, String query, String user, boolean stream, String conversation_id) throws DifyClientException {
@@ -26,35 +39,37 @@ public class ChatClient extends DifyClient {
     }
 
     public Response getConversationMessages(String user, String conversation_id, String first_id, String limit) throws DifyClientException {
-        JSONObject json = new JSONObject();
-        json.put("user", user);
-        if (conversation_id != null && !conversation_id.isEmpty()) {
-            json.put("conversation_id", conversation_id);
-        }
-        if (first_id != null && !first_id.isEmpty()) {
-            json.put("first_id", first_id);
-        }
-        if (limit != null && !limit.isEmpty()) {
-            json.put("limit", limit);
-        }
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("user", user);
 
-        return sendRequest(GET_CONVERSATION_MESSAGES, null, createJsonPayload(json));
+        if (conversation_id != null) {
+            queryParams.put("conversation_id", conversation_id);
+        }
+        if (first_id != null) {
+            queryParams.put("first_id", first_id);
+        }
+        if (limit != null) {
+            queryParams.put("limit", limit);
+        }
+        String formattedQueryParams = generateQueryParams(queryParams);
+
+        return sendRequest(GET_CONVERSATION_MESSAGES, new String[] {formattedQueryParams}, null);
     }
 
     public Response getConversations(String user, String first_id, String limit, String pinned) throws DifyClientException {
-        JSONObject json = new JSONObject();
-        json.put("user", user);
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("user", user);
         if (first_id != null && !first_id.isEmpty()) {
-            json.put("first_id", first_id);
+            queryParams.put("first_id", first_id);
         }
         if (limit != null && !limit.isEmpty()) {
-            json.put("limit", limit);
+            queryParams.put("limit", limit);
         }
         if (pinned != null && !pinned.isEmpty()) {
-            json.put("pinned", pinned);
+            queryParams.put("pinned", pinned);
         }
-
-        return sendRequest(GET_CONVERSATIONS, null, createJsonPayload(json));
+        String formattedQueryParams = generateQueryParams(queryParams);
+        return sendRequest(GET_CONVERSATIONS, new String[] {formattedQueryParams}, null);
     }
 
     public Response renameConversation(String conversation_id, String name, String user) throws DifyClientException {
