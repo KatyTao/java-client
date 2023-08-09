@@ -75,9 +75,4 @@ public class DifyClient {
     RequestBody createJsonPayload(JSONObject jsonObject) {
         return RequestBody.create(jsonObject.toJSONString(), MediaType.parse("application/json"));
     }
-
-
-    public static void main(String[] args) {
-
-    }
 }
