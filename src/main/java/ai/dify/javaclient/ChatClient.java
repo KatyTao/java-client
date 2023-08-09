@@ -38,7 +38,7 @@ public class ChatClient extends DifyClient {
         return sendRequest(CREATE_CHAT_MESSAGE, null, createJsonPayload(json));
     }
 
-    public Response getConversationMessages(String user, String conversation_id, String first_id, String limit) throws DifyClientException {
+    public Response getConversationMessages(String user, String conversation_id, String first_id, int limit) throws DifyClientException {
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("user", user);
 
@@ -48,22 +48,22 @@ public class ChatClient extends DifyClient {
         if (first_id != null) {
             queryParams.put("first_id", first_id);
         }
-        if (limit != null) {
-            queryParams.put("limit", limit);
+        if (limit > 0) {
+            queryParams.put("limit", String.valueOf(limit));
         }
         String formattedQueryParams = generateQueryParams(queryParams);
 
         return sendRequest(GET_CONVERSATION_MESSAGES, new String[] {formattedQueryParams}, null);
     }
 
-    public Response getConversations(String user, String first_id, String limit, String pinned) throws DifyClientException {
+    public Response getConversations(String user, String first_id, int limit, String pinned) throws DifyClientException {
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("user", user);
         if (first_id != null && !first_id.isEmpty()) {
             queryParams.put("first_id", first_id);
         }
-        if (limit != null && !limit.isEmpty()) {
-            queryParams.put("limit", limit);
+        if (limit > 0) {
+            queryParams.put("limit", String.valueOf(limit));
         }
         if (pinned != null && !pinned.isEmpty()) {
             queryParams.put("pinned", pinned);

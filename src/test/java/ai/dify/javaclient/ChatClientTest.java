@@ -56,7 +56,7 @@ class ChatClientTest {
     public void testGetConversationMessages() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
 
-        chatClient.getConversationMessages("testUser", "conversation123", "firstId123", "5");
+        chatClient.getConversationMessages("testUser", "conversation123", "firstId123", 5);
 
         verify(mockClient).newCall(any(Request.class));
         verify(mockCall).execute();
@@ -66,7 +66,7 @@ class ChatClientTest {
     public void testGetConversations() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
 
-        chatClient.getConversations("testUser", "firstId123", "5", "yes");
+        chatClient.getConversations("testUser", "firstId123", 5, "yes");
 
         verify(mockClient).newCall(any(Request.class));
         verify(mockCall).execute();
