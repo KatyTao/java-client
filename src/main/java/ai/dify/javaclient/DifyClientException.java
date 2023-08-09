@@ -1,4 +1,4 @@
-package com.dify.javaclient;
+package ai.dify.javaclient;
 
 public class DifyClientException extends Exception{
     public DifyClientException(String message) {

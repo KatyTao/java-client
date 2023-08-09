@@ -9,8 +9,8 @@ For the sake of this README, let's assume the SDK is available on Maven Central:
 
 ```xml
 <dependency>
-    <groupId>com.dify</groupId>
-    <artifactId>javaclient</artifactId>
+    <groupId>ai.dify</groupId>
+    <artifactId>java-client</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -19,9 +19,9 @@ For the sake of this README, let's assume the SDK is available on Maven Central:
 Once the SDK is installed, you can use it in your project as follows:
 
 ```java
-import com.dify.javaclient.DifyClient;
-import com.dify.javaclient.ChatClient;
-import com.dify.javaclient.CompletionClient;
+import ai.dify.javaclient.DifyClient;
+import ai.dify.javaclient.ChatClient;
+import ai.dify.javaclient.CompletionClient;
 import okhttp3.Response;
 
 public class DifyApp {
@@ -63,7 +63,7 @@ public class DifyApp {
             String messageId = "your-message-id";
             String rating = "5";
             client.messageFeedback(messageId, rating, user);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }

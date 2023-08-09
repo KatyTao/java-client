@@ -1,4 +1,4 @@
-package com.dify.javaclient.http;
+package ai.dify.javaclient.http;
 
 /**
  * @author Ziyao_Zhu

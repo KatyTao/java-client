@@ -1,12 +1,11 @@
-package com.dify.javaclient;
+package ai.dify.javaclient;
 
-import com.dify.javaclient.http.DifyRoute;
+import ai.dify.javaclient.constants.DifyServerConstants;
+import ai.dify.javaclient.http.DifyRoute;
 import com.alibaba.fastjson2.JSONObject;
 import okhttp3.*;
 
 import java.io.IOException;
-
-import static com.dify.javaclient.constants.DifyServerConstants.BASE_URL;
 
 public class DifyClient {
 
@@ -24,7 +23,7 @@ public class DifyClient {
     private final OkHttpClient client;
 
     public DifyClient(String apiKey) {
-        this(apiKey, BASE_URL);
+        this(apiKey, DifyServerConstants.BASE_URL);
     }
 
     public DifyClient(String apiKey, String baseUrl) {

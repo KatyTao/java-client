@@ -1,4 +1,4 @@
-package com.dify.javaclient;
+package ai.dify.javaclient;
 
 import okhttp3.*;
 import com.alibaba.fastjson2.JSONObject;

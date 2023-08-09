@@ -1,4 +1,4 @@
-package com.dify.javaclient.constants;
+package ai.dify.javaclient.constants;
 
 public class DifyServerConstants {
 
