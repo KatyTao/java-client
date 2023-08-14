@@ -10,6 +10,9 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * This class contains unit tests for the DifyClient class, focusing on its methods and interactions.
+ */
 class DifyClientTest {
 
     private static final String TEST_API_KEY = "testApiKey";
@@ -25,6 +28,11 @@ class DifyClientTest {
     @Mock
     private Response mockResponse;
 
+    /**
+     * Sets up the test environment before each test case.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @BeforeEach
     public void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
@@ -42,6 +50,11 @@ class DifyClientTest {
         }
     }
 
+    /**
+     * Tests the getApplicationParameters method of the DifyClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testGetApplicationParameters() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
@@ -53,6 +66,11 @@ class DifyClientTest {
         verify(mockCall).execute();
     }
 
+    /**
+     * Tests the messageFeedback method of the DifyClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testMessageFeedback() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);

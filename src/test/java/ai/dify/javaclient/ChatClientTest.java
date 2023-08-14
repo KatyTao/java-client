@@ -10,6 +10,9 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * This class contains unit tests for the ChatClient class, focusing on its methods and interactions.
+ */
 class ChatClientTest {
 
     private static final String TEST_API_KEY = "testApiKey";
@@ -25,6 +28,11 @@ class ChatClientTest {
     @Mock
     private Response mockResponse;
 
+    /**
+     * Sets up the test environment before each test case.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @BeforeEach
     public void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
@@ -42,6 +50,11 @@ class ChatClientTest {
         }
     }
 
+    /**
+     * Tests the createChatMessage method of the ChatClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testCreateChatMessage() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
@@ -52,6 +65,11 @@ class ChatClientTest {
         verify(mockCall).execute();
     }
 
+    /**
+     * Tests the getConversationMessages method of the ChatClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testGetConversationMessages() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
@@ -62,6 +80,12 @@ class ChatClientTest {
         verify(mockCall).execute();
     }
 
+
+    /**
+     * Tests the getConversations method of the ChatClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testGetConversations() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
@@ -72,6 +96,11 @@ class ChatClientTest {
         verify(mockCall).execute();
     }
 
+    /**
+     * Tests the renameConversation method of the ChatClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testRenameConversation() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
@@ -82,6 +111,11 @@ class ChatClientTest {
         verify(mockCall).execute();
     }
 
+    /**
+     * Tests the deleteConversation method of the ChatClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testDeleteConversation() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);

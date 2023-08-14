@@ -10,6 +10,9 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * This class contains unit tests for the CompletionClient class, focusing on its methods and interactions.
+ */
 class CompletionClientTest {
 
     private static final String TEST_API_KEY = "testApiKey";
@@ -25,6 +28,11 @@ class CompletionClientTest {
     @Mock
     private Response mockResponse;
 
+    /**
+     * Sets up the test environment before each test case.
+     *
+     * @throws IOException If an I/O error occurs.
+     */
     @BeforeEach
     public void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
@@ -42,6 +50,11 @@ class CompletionClientTest {
         }
     }
 
+    /**
+     * Tests the createCompletionMessage method of the CompletionClient class.
+     *
+     * @throws Exception If an error occurs during the test.
+     */
     @Test
     public void testCreateCompletionMessage() throws Exception {
         when(mockResponse.isSuccessful()).thenReturn(true);
